@@ -3,7 +3,18 @@ import Draggable from "react-draggable";
 
 const Text = ({ color, fontSize }) => {
     const [editMode, setEditMode] = useState(false);
-    const [text, setText] = useState("Double click to edit text");
+    const [text, setText] = useState("Tap and hold to edit text");
+    let timer;
+
+    const startTimer = () => {
+        timer = setTimeout(() => {
+            setEditMode(true);
+        }, 1000);
+    };
+
+    const clearTimer = () => {
+        clearTimeout(timer);
+    };
 
     return (
         <Draggable>
@@ -12,7 +23,7 @@ const Text = ({ color, fontSize }) => {
                     <input
                         className="font-semibold font-poppins text-2xl"
                         style={{ color: color || "black",  fontSize: `${fontSize}px` }}
-                        onDoubleClick={() => setEditMode(false)}
+                        onBlur={() => setEditMode(false)} // Exit edit mode on blur
                         type="text"
                         value={text}
                         onChange={(e) => setText(e.target.value)}
@@ -20,7 +31,11 @@ const Text = ({ color, fontSize }) => {
                         <h4
                             className="font-semibold font-poppins text-2xl"
                             style={{ color: color || "black",  fontSize: `${fontSize}px` }}
-                            onDoubleClick={() => setEditMode(true)}
+                            onTouchStart={startTimer}
+                            onTouchEnd={clearTimer}
+                            onMouseDown={startTimer}
+                            onMouseUp={clearTimer}
+                            onMouseLeave={clearTimer}
                         >
                             {text}
                         </h4>
