@@ -10,7 +10,7 @@ const EditPage = () => {
     const [count, setCount] = useState(0);
     const [textColor, setTextColor] = useState("black");
     const [zoomFactor, setZoomFactor] = useState(1); // Default zoom factor
-    const [textSize, setTextSize] = useState(16); // Default text size
+    const [textSize, setTextSize] = useState(18); // Default text size
     const memeRef = useRef();
 
     const navigateTo = (path) => {
@@ -42,9 +42,9 @@ const EditPage = () => {
     };
 
     return (
-        <div>
-            <div className="relative">
-                <div ref={memeRef} className="h-[40rem] w-[40rem] p-2 bg-white overflow-hidden">
+        <>
+            <div className="w-full flex flex-col items-center px-6 sm:px-0">
+                <div ref={memeRef} className="relative w-full aspect-square sm:w-[40rem] p-2 bg-white overflow-hidden">
                     <Draggable>
                         <div className="w-full h-full">
                             <img src={params.get("url")} alt="meme" style={{ transform: `scale(${zoomFactor})` }} className="h-full" />
@@ -56,44 +56,51 @@ const EditPage = () => {
                             <Text key={index} color={textColor} fontSize={textSize} />
                         ))}
                 </div>
-            </div>
-            <div className="buttons flex gap-6 items-center mt-6 mb-4">
-                <button className="bg-blue-600 text-white hover:bg-blue-800" onClick={addText}>
-                    Add Text
-                </button>
-                <div className="flex items-center gap-2 h-fit py-2 px-4 rounded-md">
-                    <span>Text Color:</span>
-                    <input type="color" value={textColor} onChange={(e) => setTextColor(e.target.value)} />
-                </div>
-                <div className="flex gap-2 items-center">
-                    <span>Image Size:</span>
-                    <button className="text-white bg-green-500 hover:bg-green-700" onClick={increaseZoom}>
-                        +
-                    </button>
-                    <button className="text-white bg-red-500 hover:bg-red-700" onClick={decreaseZoom}>
-                        -
-                    </button>
-                </div>
-                <div className="flex gap-2 items-center">
-                    <span>Text Size:</span>
-                    <button className="text-white bg-green-500 hover:bg-green-700" onClick={increaseTextSize}>
-                        +
-                    </button>
-                    <button className="text-white bg-red-500 hover:bg-red-700" onClick={decreaseTextSize}>
-                        -
-                    </button>
-                </div>
+                <div className="buttons flex flex-col gap-6 items-start mt-6 mb-4 w-full sm:w-[40rem]">
+                    <div className="flex gap-4 flex-wrap">
+                        <button className="bg-blue-600 text-white hover:bg-blue-800" onClick={addText}>
+                            Add Text
+                        </button>
+                        <div className="flex items-center gap-2 h-fit py-2 px-4 rounded-md">
+                            <span>Text Color:</span>
+                            <input type="color" value={textColor} onChange={(e) => setTextColor(e.target.value)} />
+                        </div>
+                    </div>
+                    <div className="flex gap-4 flex-wrap">
+                        <div className="flex gap-2 items-center">
+                            <span>Image Size:</span>
+                            <button className="text-white bg-green-500 hover:bg-green-700" onClick={increaseZoom}>
+                                +
+                            </button>
+                            <button className="text-white bg-red-500 hover:bg-red-700" onClick={decreaseZoom}>
+                                -
+                            </button>
+                        </div>
 
+                        <div className="flex gap-2 items-center">
+                            <span>Text Size:</span>
+                            <button className="text-white bg-green-500 hover:bg-green-700" onClick={increaseTextSize}>
+                                +
+                            </button>
+                            <button className="text-white bg-red-500 hover:bg-red-700" onClick={decreaseTextSize}>
+                                -
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div className="flex gap-4">
+                        <button className="text-white bg-green-500 hover:bg-green-700" onClick={() => exportComponentAsJPEG(memeRef, { fileName: "meme" })}>
+                            Download
+                        </button>
+                        <button className="bg-black text-white hover:bg-slate-700" onClick={() => navigateTo("/")}>
+                            Go Back
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div className="flex gap-4">
-                <button className="text-white bg-green-500 hover:bg-green-700" onClick={() => exportComponentAsJPEG(memeRef)}>
-                    Download
-                </button>
-                <button className="bg-black text-white hover:bg-slate-700" onClick={() => navigateTo("/")}>
-                    Go Back
-                </button>
-            </div>
-        </div>
+            
+        </>
     );
 };
 
